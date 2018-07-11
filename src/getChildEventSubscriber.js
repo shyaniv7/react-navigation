@@ -1,3 +1,4 @@
+import stackActions from "./routers/StackActions";
 /*
  * This is used to extract one children's worth of events from a stream of navigation action events
  *
@@ -66,6 +67,12 @@ export default function getChildEventSubscriber(addListener, key) {
   const upstreamSubscribers = upstreamEvents.map(eventName =>
     addListener(eventName, payload => {
       const { state, lastState, action } = payload;
+      const navigationActionsList = Object.values(stackActions);
+      
+      if (!navigationActionsList.includes(action.type)) {
+        return;
+      }
+
       const lastRoutes = lastState && lastState.routes;
       const routes = state && state.routes;
 
